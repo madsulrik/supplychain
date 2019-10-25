@@ -17,7 +17,7 @@ Then to get it running on the local blockchain and run the test suite. Start by 
 ganache-cli 
 ```
 
-then run the truffle commands
+then run the truffle commands in a new terminal window
 ``` sh
 truffle compile
 truffle migrate
