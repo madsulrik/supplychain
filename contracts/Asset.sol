@@ -16,7 +16,7 @@ contract Asset is ERC721Full {
     struct Test {
         string name;
         string ttype;
-        uint verificator;
+        address verificator;
         uint256 tokenId;
         bool accepted;
         // other metadata
@@ -31,7 +31,7 @@ contract Asset is ERC721Full {
 
     mapping (address => mapping (uint256 => address)) private _pendingTransfers;
 
-    mapping (uint256 => Test[]) private _batchTests;
+    mapping (uint256 => uint256[]) private _batchTests;
 
     event ProposeTransfer(address from, address to, uint256 tokenId);
     event RefuseTransfer(address from, address to, uint256 tokenId);
@@ -70,7 +70,7 @@ contract Asset is ERC721Full {
     }
 
     function proposeTransfer(address from, address to, uint256 tokenId) external {
-        require(isOwner(msg.sender, tokenId));
+        require(ownerOf(tokenId) == msg.sender);
         require(_pendingTransfers[from][tokenId] == address(0x0));
 
         _pendingTransfers[from][tokenId] = to;
@@ -103,8 +103,8 @@ contract Asset is ERC721Full {
 
 
     function createTest(
-        string memory name,
-        string memory ttype,
+        string calldata name,
+        string calldata ttype,
         uint256 tokenId,
         bool accepted
     ) external {

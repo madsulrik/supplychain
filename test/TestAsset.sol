@@ -13,8 +13,6 @@ contract TestAsset {
         Assert.equal(uint(0), uint(0), "should pass");
     }
 
-
-
     // Create Batch
     function testCreateBatch() public {
        // Create batch
