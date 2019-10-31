@@ -119,5 +119,16 @@ contract Asset is ERC721Full {
         emit TestCreation(msg.sender, newTestId, tokenId);
     }
 
+    function getTestsForBatch(uint256 tokenId)
+    external view returns(uint256[] memory) {
+        return _batchTests[tokenId];
+    }
+
+    function getSingleTestStatus(uint256 testId)
+    external view returns(bool) {
+        Test memory test = tests[testId];
+        return test.accepted;
+    }
+
 }
 

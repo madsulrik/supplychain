@@ -12,26 +12,39 @@ contract TestAsset {
     function testSimple() public {
         Assert.equal(uint(0), uint(0), "should pass");
     }
+    uint batch;
 
+    function beforeAllCreateBatch() private {
+        batch = avo.createBatch("Test farm before", "21-10-2019", "24-10-2019", "location", 10, 0);
+    }
     // Create Batch
     function testCreateBatch() public {
        // Create batch
-       uint newBatchId = avo.createBatch("test farm", "21", "21", "loc", 10, 0);
+       uint newBatchId = avo.createBatch("test farm", "21", "21", "loc", 10, 1);
        Assert.equal(avo.balanceOf(expectedOwner), uint(1), "Batch creator should own 1 token");
        Assert.equal(avo.ownerOf(newBatchId), expectedOwner, "Batch creator should own the created token");
     }
 
     // Propose transfer
-    function testTransfer() public {
-
+    function testPropose() public {
+        avo.proposeTransfer(address(this), address(0x2), batch);
+        Assert.equal(avo.getApproved(batch), address(0x2), "the approved address should be 2");
     }
 
-    // Reject transfer
 
+    function testIfPossibleToCreateTest() public {
+        avo.createTest("Maturity", "maturity", batch, true);
+        uint256[] memory testIds = avo.getTestsForBatch(batch);
+        Assert.equal(testIds.length, 1, "a test should be added");
+    
+    }
 
-    // Accept transfer
-
-    // something with creating and verifing
+    function testIfItIsTestStatusIsCorrect() public {
+        uint256[] memory testIds = avo.getTestsForBatch(batch);
+        uint256 testId = testIds[0];
+        bool status = avo.getSingleTestStatus(testId);
+        Assert.equal(status, true, "get a single test and test if the status is true");
+    }
 
     
 }
